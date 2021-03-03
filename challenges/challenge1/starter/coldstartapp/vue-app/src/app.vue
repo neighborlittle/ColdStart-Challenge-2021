@@ -14,6 +14,7 @@ export default {
 
 <template>
   <div id="app">
+    <notifications group="cart" />
     <HeaderBar />
     <div class="section columns">
       <main class="column">

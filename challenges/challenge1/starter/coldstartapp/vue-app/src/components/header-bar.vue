@@ -1,5 +1,6 @@
 <script>
 import HeaderBarBrand from '@/components/header-bar-brand.vue';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'HeaderBar',
@@ -12,8 +13,24 @@ export default {
   },
   methods: {
   },
+  computed: {
+    ...mapGetters('cart', ['itemsCount']),
+  },
 };
 </script>
+
+<style scoped>
+  .cart-items {
+    margin-left: 4px;
+    background: #33C5F3;
+    color: white;
+    min-width: 20px;
+    max-height: 16px;
+    text-align: center;
+    border-radius: 30%;
+    font-size: 10px;
+  }
+</style>
 
 <template>
   <header>
@@ -22,6 +39,10 @@ export default {
       <div class="navbar-menu">
         <div class="navbar-start">
           <router-link class="navbar-item nav-home" to="/">Home</router-link>
+          <router-link class="navbar-item nav-home" to="/cart">Cart
+            <span class="cart-items">{{itemsCount}}</span>
+          </router-link>
+          <a href="/.auth/login/github">Login</a>
         </div>
       </div>
     </nav>

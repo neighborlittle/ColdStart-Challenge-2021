@@ -1,9 +1,12 @@
 <script>
+import { mapMutations } from 'vuex';
+import ADD_TO_CART from '../store/modules/mutation-types';
+
 export default {
   name: 'CardContent',
   props: {
     id: {
-      type: String,
+      type: Number,
       default: () => '',
     },
     name: {
@@ -20,12 +23,21 @@ export default {
     },
   },
   methods: {
+    ...mapMutations('cart', { addToCart: ADD_TO_CART }),
   },
 };
 </script>
+<style scoped>
+  .card-content {
+    cursor: pointer;
+  }
 
+  .card-content:hover {
+    transform: scale(1.05);
+  }
+</style>
 <template>
-  <div class="card-content">
+  <div class="card-content" v-on:click="addToCart({id, name})">
     <header class="card-header">
       <p class="card-header-title">{{ name }}</p>
     </header>

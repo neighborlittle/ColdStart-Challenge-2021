@@ -1,6 +1,6 @@
+import PageNotFound from '@/components/page-not-found.vue';
 import Vue from 'vue';
 import Router from 'vue-router';
-import PageNotFound from '@/components/page-not-found.vue';
 
 Vue.use(Router);
 
@@ -16,6 +16,11 @@ export default new Router({
       path: '/catalog',
       name: 'catalog',
       component: () => import(/* webpackChunkName: "catalog" */ './views/catalog/catalog.vue'),
+    },
+    {
+      path: '/cart',
+      name: 'cart',
+      component: () => import(/* webpackChunkName: "catalog" */ './views/cart/cart.vue'),
     },
     {
       path: '*',

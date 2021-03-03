@@ -1,6 +1,7 @@
 const { getUser } = require('../shared/user-utils');
 
 module.exports = async function (context, req) {
+  console.log(req);
   // Get the user details from the request
   const user = getUser(req);
 
