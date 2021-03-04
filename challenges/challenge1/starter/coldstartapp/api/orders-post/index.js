@@ -9,9 +9,10 @@ module.exports = async function (context, req) {
 
   const preorderDate = new Date();
   const preorderItems = [];
+  console.log(orders, address);
   for (let iceCream of Object.keys(orders)) {
     for(let i = 0; i < orders[iceCream]; i++) {
-      
+      console.log(iceCream);
       preorderItems.push({
         Id: uuid(),
         User: user.userDetails,
@@ -24,7 +25,9 @@ module.exports = async function (context, req) {
       });
     }
   }
+
   context.bindings.preorders = preorderItems;
+  console.log(preorderItems);
 
   context.res.status(201);
 };
