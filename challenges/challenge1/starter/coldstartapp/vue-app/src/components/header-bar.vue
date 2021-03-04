@@ -13,12 +13,12 @@ export default {
   async created() {
     const response = await fetch('/.auth/me');
     const payload = await response.json();
-    const { clientPrincipal } = payload;
-    console.log(clientPrincipal);
+    this.clientPrincipal = payload;
   },
   data() {
     return {
       providers: ['github', 'twitter', 'facebook', 'aad', 'google'],
+      clientPrincipal: null,
     };
   },
   methods: {
@@ -40,6 +40,10 @@ export default {
     border-radius: 30%;
     font-size: 10px;
   }
+  .auth-container {
+    display: flex;
+    flex-direction: row;
+  }
 </style>
 
 <template>
@@ -52,9 +56,14 @@ export default {
           <router-link class="navbar-item nav-home" to="/cart">Cart
             <span class="cart-items">{{itemsCount}}</span>
           </router-link>
-          <AuthLogin v-for="provider in providers"
-            :key="provider"
-            :provider="provider" class="navbar-item" />
+          <div v-if="!userPrincipal" class="auth-container">
+            <AuthLogin  v-for="provider in providers"
+              :key="provider"
+              :provider="provider" class="navbar-item" />
+          </div>
+          <div v-else>
+              <a href="/.auth/logout">Log out</a>
+          </div>
         </div>
       </div>
     </nav>
