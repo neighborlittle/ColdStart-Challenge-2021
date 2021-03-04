@@ -17,6 +17,12 @@ export default {
   },
 };
 </script>
+<style scoped>
+  .auth-link {
+    align-self: center;
+    cursor: pointer;
+  }
+</style>
 
 <template>
   <div class="auth-link" @click="goAuth">{{ provider }}</div>

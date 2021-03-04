@@ -1,7 +1,9 @@
 <script>
+import axios from 'axios';
 import ListHeader from '@/components/list-header.vue';
-import AuthLogin from '@/components/auth-login.vue';
 import { mapGetters } from 'vuex';
+import API from '../../store/config';
+
 
 export default {
   name: 'Cart',
@@ -15,18 +17,21 @@ export default {
   },
   components: {
     ListHeader,
-    AuthLogin,
   },
   computed: {
     ...mapGetters('cart', { cart: 'cart', itemsCount: 'itemsCount' }),
     ...mapGetters('catalog', { catalog: 'catalog' }),
   },
   methods: {
-    async getUserInfo() {
-      const response = await fetch('/.auth/me');
-      const payload = await response.json();
-      const { clientPrincipal } = payload;
-      console.log(clientPrincipal);
+    async preorder() {
+      try {
+        await axios.post(`${API}/orders`, {
+          address: this.address,
+          orders: this.cart,
+        });
+      } catch (err) {
+        console.log(err);
+      }
     },
   },
 };
@@ -65,14 +70,14 @@ export default {
   <div class="content-container">
     <ListHeader :title="title" :routePath="routePath">
     </ListHeader>
-    <AuthLogin :provider="provider" />
     <div>
       <p>Review your order and once you confirm give us your address
          and we will deliver your icecreams once they are ready!</p>
       <div>
-        <input v-text="address" />
+        <input v-model="address" />
+        <span v-show="!address" style="color: red">You have to provide address :)</span>
       </div>
-      <button v-on:click="getUserInfo">Preorder</button>
+      <button v-on:click="preorder" :disabled="!address || itemsCount === 0">Preorder</button>
     </div>
     <div class="cart-item"
         v-for="(key) in Object.keys(cart)"

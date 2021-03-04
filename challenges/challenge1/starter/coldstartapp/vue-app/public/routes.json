@@ -4,6 +4,10 @@
       "route": "/api/catalog"
     },
     {
+      "route": "/api/orders",
+      "allowedRoles": ["authenticated"]
+    },
+    {
       "route": "/*",
       "serve": "/index.html",
       "statusCode": 200

@@ -12,6 +12,13 @@
       "type": "http",
       "direction": "out",
       "name": "res"
+    },
+    {
+      "type": "queue",
+      "direction": "out",
+      "name": "preorders",
+      "queueName": "coldstart-preorders",
+      "connection": "Connection"
     }
   ]
 }

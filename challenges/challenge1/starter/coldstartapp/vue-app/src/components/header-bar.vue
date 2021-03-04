@@ -1,14 +1,24 @@
 <script>
 import HeaderBarBrand from '@/components/header-bar-brand.vue';
+import AuthLogin from '@/components/auth-login.vue';
+
 import { mapGetters } from 'vuex';
 
 export default {
   name: 'HeaderBar',
   components: {
     HeaderBarBrand,
+    AuthLogin,
+  },
+  async created() {
+    const response = await fetch('/.auth/me');
+    const payload = await response.json();
+    const { clientPrincipal } = payload;
+    console.log(clientPrincipal);
   },
   data() {
     return {
+      providers: ['github', 'twitter', 'facebook', 'aad', 'google'],
     };
   },
   methods: {
@@ -42,7 +52,9 @@ export default {
           <router-link class="navbar-item nav-home" to="/cart">Cart
             <span class="cart-items">{{itemsCount}}</span>
           </router-link>
-          <a href="/.auth/login/github">Login</a>
+          <AuthLogin v-for="provider in providers"
+            :key="provider"
+            :provider="provider" class="navbar-item" />
         </div>
       </div>
     </nav>
