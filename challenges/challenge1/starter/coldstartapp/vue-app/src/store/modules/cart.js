@@ -1,6 +1,6 @@
 import Vue from 'vue';
 
-import ADD_TO_CART from './mutation-types';
+import { ADD_TO_CART, CLEAR_CART } from './mutation-types';
 
 
 export default {
@@ -21,6 +21,9 @@ export default {
         group: 'app',
         title: `${icecream.name} added to cart`,
       });
+    },
+    [CLEAR_CART](state) {
+      state.cart = {};
     },
   },
   getters: {
