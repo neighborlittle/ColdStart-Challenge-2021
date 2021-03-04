@@ -1,8 +1,9 @@
 <script>
 import axios from 'axios';
 import ListHeader from '@/components/list-header.vue';
-import { mapGetters } from 'vuex';
+import { mapGetters, mapMutations } from 'vuex';
 import API from '../../store/config';
+import { CLEAR_CART } from '../../store/modules/mutation-types';
 
 
 export default {
@@ -23,19 +24,21 @@ export default {
     ...mapGetters('catalog', { catalog: 'catalog' }),
   },
   methods: {
+    ...mapMutations('cart', { clearCart: CLEAR_CART }),
     async preorder() {
       try {
         await axios.post(`${API}/orders`, {
           address: this.address,
           orders: this.cart,
         });
+        this.clearCart();
         this.$notify({
           group: 'app',
           title: 'Preordered icecreams',
         });
       } catch (err) {
         console.log(err);
-        if (err.response.status) {
+        if (err.response.status === 401) {
           this.$notify({
             group: 'app',
             title: 'Please login to preorder',

@@ -1,6 +1,6 @@
 <script>
 import { mapMutations } from 'vuex';
-import ADD_TO_CART from '../store/modules/mutation-types';
+import { ADD_TO_CART } from '../store/modules/mutation-types';
 
 export default {
   name: 'CardContent',
