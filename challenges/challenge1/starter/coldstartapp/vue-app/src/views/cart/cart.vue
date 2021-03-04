@@ -29,7 +29,12 @@ export default {
           address: this.address,
           orders: this.cart,
         });
+        this.$notify({
+          group: 'app',
+          title: 'Preordered icecreams',
+        });
       } catch (err) {
+        console.log(err);
         if (err.response.status) {
           this.$notify({
             group: 'app',
@@ -42,7 +47,6 @@ export default {
             title: 'Unexpected error occured',
             type: 'error',
           });
-          console.log(err);
         }
       }
     },

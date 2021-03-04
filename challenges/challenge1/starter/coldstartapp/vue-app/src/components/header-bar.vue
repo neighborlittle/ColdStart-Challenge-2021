@@ -56,7 +56,7 @@ export default {
           <router-link class="navbar-item nav-home" to="/cart">Cart
             <span class="cart-items">{{itemsCount}}</span>
           </router-link>
-          <div v-if="!userPrincipal" class="auth-container">
+          <div v-if="!clientPrincipal" class="auth-container">
             <AuthLogin  v-for="provider in providers"
               :key="provider"
               :provider="provider" class="navbar-item" />
