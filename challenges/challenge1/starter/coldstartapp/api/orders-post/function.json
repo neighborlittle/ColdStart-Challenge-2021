@@ -18,7 +18,7 @@
       "direction": "out",
       "name": "preorders",
       "queueName": "coldstart-preorders",
-      "connection": "Connection"
+      "connection": "QueueConnection"
     }
   ]
 }
