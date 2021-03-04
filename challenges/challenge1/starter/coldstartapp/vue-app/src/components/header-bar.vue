@@ -61,7 +61,7 @@ export default {
               :key="provider"
               :provider="provider" class="navbar-item" />
           </div>
-          <router-link v-else class="navbar-item nav-home" to="/.auth/logout">Log out</router-link>
+          <a v-else href="/.auth/logout" class="navbar-item nav-home">Log out</a>
         </div>
       </div>
     </nav>
