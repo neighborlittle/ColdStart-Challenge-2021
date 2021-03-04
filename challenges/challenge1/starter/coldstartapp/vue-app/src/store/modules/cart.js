@@ -18,7 +18,7 @@ export default {
         state.cart[icecream.id] = 1;
       }
       Vue.notify({
-        group: 'cart',
+        group: 'app',
         title: `${icecream.name} added to cart`,
       });
     },

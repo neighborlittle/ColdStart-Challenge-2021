@@ -30,7 +30,20 @@ export default {
           orders: this.cart,
         });
       } catch (err) {
-        console.log(err);
+        if (err.response.status) {
+          this.$notify({
+            group: 'app',
+            title: 'Please login to preorder',
+            type: 'warn',
+          });
+        } else {
+          this.$notify({
+            group: 'app',
+            title: 'Unexpected error occured',
+            type: 'error',
+          });
+          console.log(err);
+        }
       }
     },
   },
