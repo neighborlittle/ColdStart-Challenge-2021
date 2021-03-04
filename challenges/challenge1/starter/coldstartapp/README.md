@@ -7,6 +7,9 @@ This is a starter web application for Azure Static Web Apps. It consists of two 
 - Vue.js frontend
 - Node.js backend apis, running on Azure Functions
 
+## Hosting Azure Static Web Apps
+
+You need to add following app setting to your static app: QueueConnection: "{your key}"
 
 ## Running the solution locally
 
@@ -23,6 +26,7 @@ npm run serve
 ### Backend APIs
 
 The backend APIs are hosted using Azure Functions and can be run locally using the Azure Functions Core Tools.
+In local.settings.json add Value: "QueueConnection": "{your key}"
 
 ```cmd
 cd api
