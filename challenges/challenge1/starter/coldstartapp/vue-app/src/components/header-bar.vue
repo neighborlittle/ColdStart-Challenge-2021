@@ -13,7 +13,7 @@ export default {
   async created() {
     const response = await fetch('/.auth/me');
     const payload = await response.json();
-    this.clientPrincipal = payload;
+    this.clientPrincipal = payload.clientPrincipal;
   },
   data() {
     return {
@@ -57,13 +57,11 @@ export default {
             <span class="cart-items">{{itemsCount}}</span>
           </router-link>
           <div v-if="!clientPrincipal" class="auth-container">
-            <AuthLogin  v-for="provider in providers"
+            <AuthLogin v-for="provider in providers"
               :key="provider"
               :provider="provider" class="navbar-item" />
           </div>
-          <div v-else>
-              <a href="/.auth/logout">Log out</a>
-          </div>
+          <router-link class="navbar-item nav-home" to="/.auth/logout">Log out</router-link>
         </div>
       </div>
     </nav>
