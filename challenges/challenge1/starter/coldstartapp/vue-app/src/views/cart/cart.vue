@@ -12,7 +12,6 @@ export default {
     return {
       routePath: '/cart',
       title: 'Your Cart',
-      provider: 'github',
       address: '',
     };
   },
@@ -21,7 +20,7 @@ export default {
   },
   computed: {
     ...mapGetters('cart', { cart: 'cart', itemsCount: 'itemsCount' }),
-    ...mapGetters('catalog', { catalog: 'catalog' }),
+    ...mapGetters('catalog', { catalog: 'catalog', recommendation: 'recommendation' }),
   },
   methods: {
     ...mapMutations('cart', { clearCart: CLEAR_CART }),
@@ -30,6 +29,7 @@ export default {
         await axios.post(`${API}/orders`, {
           address: this.address,
           orders: this.cart,
+          recommendation: this.recommendation,
         });
         this.clearCart();
         this.$notify({

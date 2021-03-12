@@ -1,6 +1,7 @@
 <script>
 import HeaderBarBrand from '@/components/header-bar-brand.vue';
 import AuthLogin from '@/components/auth-login.vue';
+import AuthLogout from '@/components/auth-logout.vue';
 
 import { mapGetters } from 'vuex';
 
@@ -9,6 +10,7 @@ export default {
   components: {
     HeaderBarBrand,
     AuthLogin,
+    AuthLogout,
   },
   async created() {
     const response = await fetch('/.auth/me');
@@ -43,6 +45,7 @@ export default {
   .auth-container {
     display: flex;
     flex-direction: row;
+    height: max-content;
   }
 </style>
 
@@ -59,9 +62,9 @@ export default {
           <div v-if="!clientPrincipal" class="auth-container">
             <AuthLogin v-for="provider in providers"
               :key="provider"
-              :provider="provider" class="navbar-item" />
+              :provider="provider" class="navbar-item nav-home" />
           </div>
-          <a v-else href="/.auth/logout" class="navbar-item nav-home">Log out</a>
+          <AuthLogout v-else class="navbar-item nav-home" />
         </div>
       </div>
     </nav>

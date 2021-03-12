@@ -1,17 +1,11 @@
-const Personalizer = require('@azure/cognitiveservices-personalizer');
-const CognitiveServicesCredentials = require('@azure/ms-rest-azure-js').CognitiveServicesCredentials;
 const { v1: uuidv1 } = require('uuid');
-const dbConfig = require('../shared/dbConfig');
+const { queryIcecreams } = require('../shared/database/queryIcecreams');
 
-const { Connection, Request } = require("tedious");
-const { getUser } = require('../shared/user-utils');
-
+const { getUser, getUserBrowser } = require('../shared/user-utils');
+const { getPersonalizerClient } = require('../shared/personalizer');
 
 module.exports = async function (context, req) {
-  const credentials = new CognitiveServicesCredentials(process.env['personalizer_key']);
-
-  const personalizerClient = new Personalizer.PersonalizerClient(credentials, process.env["personalizer_uri"]);
-  
+  const personalizerClient = getPersonalizerClient();
   const actions = await loadActions();
   const rankRequest = {
     eventId: uuidv1(),
@@ -21,52 +15,21 @@ module.exports = async function (context, req) {
   };
 
   const rankResponse = await personalizerClient.rank(rankRequest);
-  context.res.status(200).send(rankResponse.rewardActionId);
+  context.res.status(200).send({
+    icecreamId: rankResponse.rewardActionId,
+    eventId: rankResponse.eventId
+  });
 };
 
-
 async function loadActions() {
-  return new Promise((resolve, reject) => {
-    const connection = new Connection(dbConfig);
-    const result = [];
-    const request = new Request(
-      `SELECT Id, Name FROM [dbo].[Icecreams]`,
-      (err, rowCount) => {
-        if (err) { 
-          console.error(err.message);
-          reject();
-        }
-        else {
-          resolve(result);
-        }
+  const icecreams = await queryIcecreams();
+  return icecreams.map(ice => {
+    return {
+      id: `${ice.Id}`,
+      features: [ { name: ice.Name } ]
+    };
   });
-
-  request.on("row", columns => {
-    const action = {};
-    columns.forEach(column => {
-      if (column.metadata.colName == 'Id') {
-        action.id = `${column.value}`;
-      }
-      else {
-        action.features = [{ 'name': column.value }];
-      }
-    });
-    result.push(action);
-  });
-
-  connection.on("connect", err => {
-    if (err) {
-      console.error(err.message);
-      context.res.status(500).send(error);
-    } else {
-      console.log('connection established: run query');
-      connection.execSql(request);
-    }
-  });
-  connection.connect();
-});
 }
-
 
 function getContextFeatures(req) {
   let time = null;
@@ -76,17 +39,14 @@ function getContextFeatures(req) {
   else if (hour < 17) time = 'day';
   else time = 'afternoon';
 
-  const user = getUser(req);
-
   const day = new Date().getDay();
-  const loggedIn = user.userId ? true : false;
-
+  const loggedIn = getUser(req).userId ? true : false;
+  const browser = getUserBrowser(req.headers['user-agent']);
 
   return [
     { time },
     { day },
     { loggedIn },
+    { browser }
   ];
 }
-
-

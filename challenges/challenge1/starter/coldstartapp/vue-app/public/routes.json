@@ -1,6 +1,9 @@
 {
   "routes": [
     {
+      "route": "/api/recommendation"
+    },
+    {
       "route": "/api/catalog"
     },
     {

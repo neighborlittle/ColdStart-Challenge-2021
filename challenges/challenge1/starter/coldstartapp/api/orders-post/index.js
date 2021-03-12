@@ -1,18 +1,18 @@
 const { getUser } = require('../shared/user-utils');
-const dbConfig = require('../shared/dbConfig');
+const dbConfig = require('../shared/database/dbConfig');
 
 const { Connection, TYPES } = require("tedious");
+const { getPersonalizerClient } = require('../shared/personalizer');
 
 module.exports = async function (context, req) {
-  // Get the user details from the request
+  const { address, orders, recommendation } = req.body;
+  await scoreReward({orders, recommendation});
   const user = getUser(req);
-  const { address, orders } = req.body;
 
   const preorderDate = new Date();
   const connection = new Connection(dbConfig);
 
   const bulkLoad = connection.newBulkLoad('Orders', (err, rowCount) => {
-    console.log(err, rowCount);
     if (err)
       context.res.status(500).send(err);
     else
@@ -45,3 +45,9 @@ module.exports = async function (context, req) {
       connection.execBulkLoad(bulkLoad);
   });
 };
+
+async function scoreReward({orders, recommendation}) {
+  const personalizerClient = getPersonalizerClient();
+  const reward = Object.keys(orders).includes(recommendation.icecreamId) ? 1 : 0;
+  await personalizerClient.events.reward(recommendation.eventId, {value: reward});
+}
